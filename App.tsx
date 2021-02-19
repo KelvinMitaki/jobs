@@ -14,21 +14,20 @@ enableScreens();
 LogBox.ignoreLogs([
   "It appears that you are using old version of react-navigation library. Please update @react-navigation/bottom-tabs, @react-navigation/stack and @react-navigation/drawer to version 5.10.0 or above to take full advantage of new functionality added to react-native-screens"
 ]);
-const StackNavigator = createStackNavigator({
-  Settings: SettingsScreen
-});
 const BottomTabNavigator = createBottomTabNavigator({
   Map: createStackNavigator({ Map: MapScreen }),
   Deck: createStackNavigator({ Deck: DeckScreen }),
   Review: createStackNavigator({
     Review: ReviewScreen,
-    Settings: StackNavigator
+    Settings: SettingsScreen
   })
 });
 const SwitchNavigator = createSwitchNavigator({
-  Auth: createStackNavigator({
-    Welcome: WelcomeScreen,
-    Auth: AuthScreen
+  Initial: createBottomTabNavigator({
+    Welcome: createStackNavigator({ Welcome: WelcomeScreen }),
+    Auth: createStackNavigator({
+      Auth: AuthScreen
+    })
   }),
   Main: BottomTabNavigator
 });
