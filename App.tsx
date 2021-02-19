@@ -23,10 +23,10 @@ const BottomTabNavigator = createBottomTabNavigator({
   })
 });
 const SwitchNavigator = createSwitchNavigator({
-  Initial: createBottomTabNavigator({
-    Welcome: WelcomeScreen,
-    Auth: AuthScreen
-  }),
+  // Initial: createStackNavigator({
+  // }),
+  Welcome: WelcomeScreen,
+  Auth: AuthScreen,
   Main: BottomTabNavigator
 });
 
