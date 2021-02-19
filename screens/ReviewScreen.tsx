@@ -15,6 +15,7 @@ const ReviewScreen: NavigationStackScreenComponent = () => {
   );
 };
 ReviewScreen.navigationOptions = ({ navigation }) => ({
+  headerTitle: "Review Jobs",
   headerRight: () => (
     <HeaderButtons HeaderButtonComponent={props => <HeaderButton {...props} />}>
       <Item title="Settings" onPress={() => navigation.navigate("Settings")} />

@@ -1,10 +1,17 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import Slides from "../components/Slides";
+
+const SLIDE_DATA = [
+  { text: "Wecome to Jobs" },
+  { text: "Use This To Get A Job" },
+  { text: "Set Your Location Then Swipe Away" }
+];
 
 const WelcomeScreen = () => {
   return (
     <View>
-      <Text>WelcomeScreen WelcomeScreen</Text>
+      <Slides SLIDE_DATA={SLIDE_DATA} />
     </View>
   );
 };
