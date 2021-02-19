@@ -17,17 +17,27 @@ import {
   StackNavigationOptions,
   StackNavigationProp
 } from "react-navigation-stack/lib/typescript/src/vendor/types";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import { Field, InjectedFormProps, reduxForm } from "redux-form";
 import InputComponent from "../components/Input";
 import { Redux } from "../interfaces/Redux";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface FormValues {
   email: string;
   password: string;
+}
+
+export interface Authenticate {
+  type: "authenticate";
+  payload: {
+    email: string | null;
+    id: string | null;
+    token: string | null;
+  };
 }
 
 const AuthScreen: React.FC<
@@ -43,6 +53,7 @@ const AuthScreen: React.FC<
     >
   >;
 } = ({ navigation, valid }) => {
+  const dispatch = useDispatch();
   const { form } = useSelector((state: Redux) => state);
   const [auth, setAuth] = useState<"signin" | "signup">("signin");
   const [error, setError] = useState<string | null>(null);
@@ -66,8 +77,18 @@ const AuthScreen: React.FC<
           returnSecureToken: true
         }
       );
-      console.log(data);
+
+      const { email, idToken, localId } = data;
+      dispatch<Authenticate>({
+        type: "authenticate",
+        payload: { email, token: idToken, id: localId }
+      });
+      await AsyncStorage.setItem(
+        "auth",
+        JSON.stringify({ email, token: idToken, id: localId })
+      );
       setLoading(false);
+      navigation.navigate("Main");
     } catch (error) {
       console.log(error.response.data);
       setLoading(false);

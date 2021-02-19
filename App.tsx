@@ -13,6 +13,7 @@ import WelcomeScreen from "./screens/WelcomeScreen";
 import { createStore } from "redux";
 import reducers from "./redux";
 import { Provider } from "react-redux";
+import StartScreen from "./screens/StartScreen";
 enableScreens();
 LogBox.ignoreLogs([
   "It appears that you are using old version of react-navigation library. Please update @react-navigation/bottom-tabs, @react-navigation/stack and @react-navigation/drawer to version 5.10.0 or above to take full advantage of new functionality added to react-native-screens",
@@ -27,6 +28,7 @@ const BottomTabNavigator = createBottomTabNavigator({
   })
 });
 const SwitchNavigator = createSwitchNavigator({
+  Start: StartScreen,
   Welcome: WelcomeScreen,
   Auth: createStackNavigator({ Auth: AuthScreen }),
   Main: BottomTabNavigator
