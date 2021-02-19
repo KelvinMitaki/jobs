@@ -1,7 +1,7 @@
 {
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
+    "start": "env-cmd -f ./config/keys.env expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
@@ -11,7 +11,9 @@
     "@react-native-community/masked-view": "0.1.10",
     "@types/react-redux": "^7.1.16",
     "axios": "^0.21.1",
+    "env-cmd": "^10.1.0",
     "expo": "~40.0.0",
+    "expo-facebook": "~9.1.0",
     "expo-status-bar": "~1.0.3",
     "react": "16.13.1",
     "react-dom": "16.13.1",
@@ -28,6 +30,7 @@
     "react-navigation-tabs": "^2.10.1",
     "react-redux": "^7.2.2",
     "redux": "^4.0.5",
+    "redux-form": "^8.3.7",
     "redux-persist": "^6.0.0"
   },
   "devDependencies": {
