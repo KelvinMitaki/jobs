@@ -10,7 +10,8 @@ const StartScreen: NavigationSwitchScreenComponent = ({ navigation }) => {
     const auth = async () => {
       try {
         let data = await AsyncStorage.getItem("auth");
-        if (data) {
+        let registered = await AsyncStorage.getItem("first_time");
+        if (data && registered) {
           data = JSON.parse(data);
           await axios.get(
             `https://jobs-ab884-default-rtdb.firebaseio.com/products.json?auth=${
@@ -18,7 +19,10 @@ const StartScreen: NavigationSwitchScreenComponent = ({ navigation }) => {
             }`
           );
           navigation.navigate("Main");
+        } else if (registered && !data) {
+          navigation.navigate("Auth");
         } else {
+          await AsyncStorage.setItem("first_time", "registered");
           navigation.navigate("Welcome");
         }
       } catch (error) {
