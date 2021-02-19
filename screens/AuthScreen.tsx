@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
+  ScrollView,
   StyleSheet,
   Text,
   View
@@ -22,6 +23,7 @@ import { Field, InjectedFormProps, reduxForm } from "redux-form";
 import InputComponent from "../components/Input";
 import { Redux } from "../interfaces/Redux";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import axios from "axios";
 
 interface FormValues {
   email: string;
@@ -43,17 +45,43 @@ const AuthScreen: React.FC<
 } = ({ navigation, valid }) => {
   const { form } = useSelector((state: Redux) => state);
   const [auth, setAuth] = useState<"signin" | "signup">("signin");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+
   useEffect(() => {
     navigation.setParams({
       headerTitle: auth === "signin" ? "Sign In" : "Sign Up"
     });
   }, [auth]);
+  const authenticate = async () => {
+    try {
+      setError(null);
+      setLoading(true);
+      const { data } = await axios.post(
+        `https://identitytoolkit.googleapis.com/v1/accounts:${
+          auth === "signin" ? "signInWithPassword" : "signUp"
+        }?key=${process.env.EXPO_API_KEY}`,
+        {
+          ...form.AuthScreen.values,
+          returnSecureToken: true
+        }
+      );
+      console.log(data);
+      setLoading(false);
+    } catch (error) {
+      console.log(error.response.data);
+      setLoading(false);
+      auth === "signin"
+        ? setError("Invalid email or password")
+        : setError("Email already in use");
+    }
+  };
   return (
     <TouchableWithoutFeedback
       onPress={() => Keyboard.dismiss()}
       style={{ height: "100%" }}
     >
-      <View style={styles.auth}>
+      <ScrollView contentContainerStyle={styles.auth}>
         <KeyboardAvoidingView behavior="padding">
           <Field name="email" placeholder="Email" component={InputComponent} />
           <Field
@@ -63,22 +91,25 @@ const AuthScreen: React.FC<
           />
           <Button
             title="Submit"
-            onPress={() => {
-              console.log(form.values);
-            }}
+            onPress={authenticate}
             containerStyle={{ marginHorizontal: "5%" }}
             disabled={!valid}
+            loading={loading}
           />
           <Button
             title={
               auth === "signin" ? "Switch to sign up" : "Switch to sign in"
             }
-            onPress={() => setAuth(a => (a === "signin" ? "signup" : "signin"))}
+            onPress={() => {
+              setError(null);
+              setAuth(a => (a === "signin" ? "signup" : "signin"));
+            }}
             containerStyle={{ marginHorizontal: "5%", marginTop: 20 }}
             type="outline"
           />
+          {error && <Text style={styles.error}>{error}</Text>}
         </KeyboardAvoidingView>
-      </View>
+      </ScrollView>
     </TouchableWithoutFeedback>
   );
 };
@@ -115,5 +146,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flex: 1,
     marginBottom: "25%"
+  },
+  error: {
+    color: "red",
+    fontWeight: "bold",
+    textAlign: "center",
+    marginTop: 20
   }
 });

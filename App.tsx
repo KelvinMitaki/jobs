@@ -15,7 +15,8 @@ import reducers from "./redux";
 import { Provider } from "react-redux";
 enableScreens();
 LogBox.ignoreLogs([
-  "It appears that you are using old version of react-navigation library. Please update @react-navigation/bottom-tabs, @react-navigation/stack and @react-navigation/drawer to version 5.10.0 or above to take full advantage of new functionality added to react-native-screens"
+  "It appears that you are using old version of react-navigation library. Please update @react-navigation/bottom-tabs, @react-navigation/stack and @react-navigation/drawer to version 5.10.0 or above to take full advantage of new functionality added to react-native-screens",
+  "Warning: Cannot update a component from inside the function body of a different component."
 ]);
 const BottomTabNavigator = createBottomTabNavigator({
   Map: createStackNavigator({ Map: MapScreen }),

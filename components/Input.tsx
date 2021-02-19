@@ -23,6 +23,7 @@ const InputComponent: React.FC<WrappedFieldProps & Props> = ({
         secureTextEntry={input.name === "password"}
         errorMessage={meta.touched && meta.error ? meta.error : ""}
         errorStyle={{ fontSize: 15, fontWeight: "bold" }}
+        autoCapitalize="none"
       />
     </View>
   );
